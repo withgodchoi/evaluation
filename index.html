@@ -28,12 +28,15 @@
             line-height: 1.6;
             color: #2c2c2c;
             background-color: #ffffff;
+            overflow-x: hidden;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            overflow-x: hidden;
+            width: 100%;
         }
 
         .header {
@@ -62,6 +65,8 @@
             padding: 35px;
             border-radius: 8px;
             border: 2px solid #B5B5B5;
+            overflow-x: hidden;
+            word-wrap: break-word;
         }
 
         .section h2 {
@@ -105,6 +110,9 @@
             border-radius: 8px;
             border-left: 5px solid #A40F16;
             border: 1px solid #B5B5B5;
+            overflow: hidden;
+            word-wrap: break-word;
+            min-width: 0;
         }
 
         .metric-card h4 {
@@ -123,23 +131,33 @@
             text-overflow: ellipsis;
         }
 
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 2px solid #B5B5B5;
+            border-radius: 8px;
+        }
+
         .analysis-table {
             width: 100%;
+            min-width: 600px;
             border-collapse: separate;
             border-spacing: 0;
-            margin: 25px 0;
+            margin: 0;
             border-radius: 8px;
-            overflow: hidden;
-            border: 2px solid #B5B5B5;
+            border: none;
         }
 
         .analysis-table th,
         .analysis-table td {
             border: 1px solid #B5B5B5;
-            padding: 16px;
+            padding: 12px 8px;
             text-align: center;
             border-left: none;
             border-right: none;
+            white-space: nowrap;
+            min-width: 90px;
         }
 
         .analysis-table th {
@@ -172,6 +190,8 @@
             padding: 25px;
             border-radius: 8px;
             margin: 25px 0;
+            overflow-x: hidden;
+            word-wrap: break-word;
         }
 
         .recommendation h4 {
@@ -205,32 +225,205 @@
             font-weight: 600;
         }
 
+        /* 반응형 그리드 클래스 */
+        .responsive-4-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .responsive-3-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
         /* 반응형 디자인 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 5px;
+                width: 100vw;
+                max-width: 100vw;
+                margin: 0;
+            }
+
+            .header {
+                padding: 20px 10px;
+                margin-bottom: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.6em;
+                line-height: 1.2;
+                margin-bottom: 10px;
+            }
+
+            .header p {
+                font-size: 1.1em;
+            }
+
+            .section {
+                padding: 15px;
+                margin: 15px 0;
+                overflow-x: hidden;
+            }
+
+            .section h2 {
+                font-size: 1.4em;
+                margin-bottom: 15px;
+            }
+
+            .section h3 {
+                font-size: 1.2em;
+                margin: 20px 0 12px 0;
+                padding-left: 10px;
+            }
+
+            .metrics-grid,
+            .responsive-4-grid,
+            .responsive-3-grid {
+                grid-template-columns: 1fr !important;
+                gap: 10px;
+            }
+
+            .metric-card {
+                padding: 15px;
+            }
+
+            .metric-card h4 {
+                font-size: 1em;
+            }
+
+            .metric-value {
+                font-size: 1.2em;
+            }
+
+            .chart-container {
+                height: 250px;
+                padding: 5px;
+            }
+
+            .table-container {
+                margin: 15px -15px;
+                border-radius: 0;
+            }
+
+            .analysis-table {
+                font-size: 0.7em;
+                min-width: 500px;
+            }
+
+            .analysis-table th,
+            .analysis-table td {
+                padding: 8px 4px;
+                min-width: 70px;
+                font-size: 0.8em;
+            }
+
+            .recommendation {
+                padding: 15px;
+                margin: 15px 0;
+            }
+
+            .recommendation h4 {
+                font-size: 1.1em;
+                margin-bottom: 10px;
+            }
+
+            .recommendation ul {
+                padding-left: 15px;
+            }
+
+            .recommendation ul li {
+                margin: 5px 0;
+                font-size: 0.9em;
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
             }
 
             .header {
-                padding: 30px 20px;
+                padding: 25px 15px;
             }
 
             .header h1 {
-                font-size: 2.2em;
+                font-size: 2em;
+                line-height: 1.3;
+            }
+
+            .header p {
+                font-size: 1.2em;
             }
 
             .section {
-                padding: 25px;
+                padding: 20px;
                 margin: 20px 0;
+                overflow-x: hidden;
             }
 
-            .metrics-grid {
-                grid-template-columns: 1fr;
+            .section h2 {
+                font-size: 1.6em;
+            }
+
+            .section h3 {
+                font-size: 1.3em;
+                margin: 25px 0 15px 0;
+            }
+
+            .metrics-grid,
+            .responsive-4-grid,
+            .responsive-3-grid {
+                grid-template-columns: 1fr !important;
                 gap: 15px;
+            }
+
+            .metric-card {
+                padding: 20px;
             }
 
             .chart-container {
                 height: 300px;
+                padding: 8px;
+            }
+
+            .table-container {
+                margin: 20px -20px;
+                border-radius: 0;
+            }
+
+            .analysis-table {
+                font-size: 0.8em;
+                min-width: 550px;
+            }
+
+            .analysis-table th,
+            .analysis-table td {
+                padding: 10px 6px;
+                min-width: 80px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                max-width: 95%;
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2.4em;
+            }
+
+            .responsive-4-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 20px;
+            }
+
+            .responsive-3-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 20px;
+            }
+
+            .chart-container {
+                height: 350px;
             }
         }
 
@@ -263,7 +456,7 @@
             <h2>분석 개요</h2>
             <p>중앙일보 대학평가에서 재정 관련 지표는 <span class="highlight">총 80점(27.6%)</span>으로 상당한 비중을 차지합니다.</p>
 
-            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="metrics-grid responsive-4-grid">
                 <div class="metric-card">
                     <h4>교육여건 재정지표</h4>
                     <div class="metric-value">40점 (13.8%)</div>
@@ -308,18 +501,19 @@
                 <canvas id="totalRevenueChart"></canvas>
             </div>
 
-            <table class="analysis-table">
-                <thead>
-                    <tr>
-                        <th>구분 (억원)</th>
-                        <th>경희대</th>
-                        <th>고려대</th>
-                        <th>성균관대</th>
-                        <th>연세대</th>
-                        <th>한양대</th>
-                        <th>경희대 순위</th>
-                    </tr>
-                </thead>
+            <div class="table-container">
+                <table class="analysis-table">
+                    <thead>
+                        <tr>
+                            <th>구분 (억원)</th>
+                            <th>경희대</th>
+                            <th>고려대</th>
+                            <th>성균관대</th>
+                            <th>연세대</th>
+                            <th>한양대</th>
+                            <th>경희대 순위</th>
+                        </tr>
+                    </thead>
                 <tbody>
                     <tr style="background-color: #ffe8ee;">
                         <td><strong>자금수입총계</strong></td>
@@ -412,7 +606,8 @@
                         <td style="color: #d32f2f; font-weight: bold;">5위</td>
                     </tr>
                 </tbody>
-            </table>
+                </table>
+            </div>
 
             <h3>핵심 재정지표 격차 분석</h3>
             <div class="chart-container">
@@ -429,7 +624,7 @@
             </div>
 
             <h3>1. 등록금 수입 격차 (교육비 지표의 기준점)</h3>
-            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="metrics-grid responsive-4-grid">
                 <div class="metric-card">
                     <h4>경희대학교</h4>
                     <div class="metric-value">3,135억원 (4위)</div>
@@ -449,7 +644,7 @@
             </div>
 
             <h3>2. 기부금 수입 격차 (중앙일보 평가 10점 직접 영향)</h3>
-            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="metrics-grid responsive-4-grid">
                 <div class="metric-card">
                     <h4>경희대학교 기부금</h4>
                     <div class="metric-value">116억원 (5위)</div>
@@ -470,17 +665,18 @@
 
             <h3>3. 전입금 수입 격차 (교육비 관련 지표에 간접 영향)</h3>
 
-            <table class="analysis-table" style="margin-top: 20px;">
-                <thead>
-                    <tr>
-                        <th>대학</th>
-                        <th>전입금 총액</th>
-                        <th>부속병원전입금</th>
-                        <th>산학협력단전입금</th>
-                        <th>법인전입금</th>
-                        <th>기타 전입금</th>
-                    </tr>
-                </thead>
+            <div class="table-container">
+                <table class="analysis-table" style="margin-top: 0;">
+                    <thead>
+                        <tr>
+                            <th>대학</th>
+                            <th>전입금 총액</th>
+                            <th>부속병원전입금</th>
+                            <th>산학협력단전입금</th>
+                            <th>법인전입금</th>
+                            <th>기타 전입금</th>
+                        </tr>
+                    </thead>
                 <tbody>
                     <tr>
                         <td class="kyunghee">경희대학교</td>
@@ -531,10 +727,11 @@
                         <td>-127억원</td>
                     </tr>
                 </tbody>
-            </table>
+                </table>
+            </div>
 
             <h3>4. 기타교육부대수입 격차 (교육비 지표에 직접 영향)</h3>
-            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="metrics-grid responsive-4-grid">
                 <div class="metric-card">
                     <h4>경희대학교</h4>
                     <div class="metric-value">25억원 (5위)</div>
@@ -554,7 +751,7 @@
             </div>
 
             <h3>5. 임의기금인출수입 격차 (교육 투자 여력에 영향)</h3>
-            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="metrics-grid responsive-4-grid">
                 <div class="metric-card">
                     <h4>경희대학교</h4>
                     <div class="metric-value">283억원 (5위)</div>
@@ -574,7 +771,7 @@
             </div>
 
             <h3>6. 미사용전기이월자금 격차 (재정 안정성 지표)</h3>
-            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="metrics-grid responsive-4-grid">
                 <div class="metric-card">
                     <h4>경희대학교</h4>
                     <div class="metric-value">44억원 (5위)</div>
@@ -603,7 +800,7 @@
             </div>
 
             <h3>자금수입총계 격차 분석</h3>
-            <div class="metrics-grid" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="metrics-grid responsive-3-grid">
                 <div class="metric-card">
                     <h4>경희대학교</h4>
                     <div class="metric-value">5,178억원</div>
@@ -619,7 +816,7 @@
             </div>
 
             <h3>주요 격차 원인 분석</h3>
-            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="metrics-grid responsive-4-grid">
                 <div class="metric-card">
                     <h4>1순위: 등록금 및 수강료</h4>
                     <div class="metric-value" style="color: #A40F16;">-957억원 (51.2%)</div>
@@ -751,7 +948,7 @@
                 <canvas id="improvementChart"></canvas>
             </div>
 
-            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="metrics-grid responsive-4-grid">
                 <div class="metric-card">
                     <h4>현재 예상 점수</h4>
                     <div class="metric-value" style="color: #0D326F;">49점/80점</div>
@@ -800,7 +997,7 @@
                             '#9900CC'
                         ],
                         borderWidth: 1,
-                        barThickness: 40
+                        barThickness: window.innerWidth < 768 ? 20 : 40
                     }]
                 },
                 options: {
@@ -934,7 +1131,7 @@
                             backgroundColor: ['#A40F16', '#FF6600', '#0066CC', '#009900'],
                             borderColor: ['#A40F16', '#FF6600', '#0066CC', '#009900'],
                             borderWidth: 1,
-                            barThickness: 50
+                            barThickness: window.innerWidth < 768 ? 25 : 50
                         }
                     ]
                 },
@@ -970,6 +1167,11 @@
 
             // 추가 인터랙티브 기능
             addInteractiveFeatures();
+
+            // 창 크기 변경 시 차트 다시 그리기
+            window.addEventListener('resize', function() {
+                setTimeout(initializeCharts, 100);
+            });
         });
 
         // 인터랙티브 기능 추가
