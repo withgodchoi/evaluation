@@ -142,11 +142,12 @@
             margin: 25px 0;
             border: 2px solid #B5B5B5;
             border-radius: 8px;
+            -webkit-overflow-scrolling: touch;
         }
 
         .analysis-table {
             width: 100%;
-            min-width: 320px;
+            min-width: 600px;
             border-collapse: separate;
             border-spacing: 0;
             margin: 0;
@@ -158,15 +159,13 @@
         .analysis-table th,
         .analysis-table td {
             border: 1px solid #B5B5B5;
-            padding: 8px 6px;
+            padding: 10px 8px;
             text-align: center;
             border-left: none;
             border-right: none;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            min-width: 60px;
-            font-size: 0.85em;
+            min-width: 80px;
+            font-size: 0.9em;
             vertical-align: middle;
         }
 
@@ -182,11 +181,13 @@
 
         .analysis-table th:first-child,
         .analysis-table td:first-child {
-            min-width: 80px;
-            max-width: 120px;
+            min-width: 100px;
+            max-width: 140px;
             white-space: normal;
             word-wrap: break-word;
-            font-size: 0.8em;
+            font-size: 0.85em;
+            text-align: left;
+            padding-left: 12px;
         }
 
         .analysis-table tr:nth-child(even) {
@@ -326,8 +327,8 @@
             }
 
             .analysis-table {
-                font-size: 0.7em;
-                min-width: 300px;
+                font-size: 0.75em;
+                min-width: 500px;
             }
 
             .analysis-table th,
@@ -420,7 +421,7 @@
 
             .analysis-table {
                 font-size: 0.8em;
-                min-width: 320px;
+                min-width: 550px;
             }
 
             .analysis-table th,
@@ -480,15 +481,12 @@
 
         /* 전체 오버플로우 방지 */
         * {
-            max-width: 100%;
             box-sizing: border-box;
         }
 
         .metrics-grid,
         .responsive-4-grid,
-        .responsive-3-grid,
-        .table-container,
-        .analysis-table {
+        .responsive-3-grid {
             max-width: 100%;
             overflow-x: hidden;
         }
