@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>경희대학교 중앙일보 대학평가 재정 영향력 분석</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- KoPubWorld 웹폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2112@1.0/KoPubWorldDotum.woff2" rel="preload" as="font" type="font/woff2" crossorigin>
+    <style>
+        @font-face {
+            font-family: 'KoPubWorldDotum';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2112@1.0/KoPubWorldDotum.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'KoPubWorldDotum', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard Variable', Pretendard, Roboto, 'Noto Sans KR', 'Segoe UI', 'Malgun Gothic', sans-serif;
+            line-height: 1.6;
+            color: #2c2c2c;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #A40F16;
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 8px;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            font-weight: 300;
+        }
+
+        .section {
+            background: #ffffff;
+            margin: 40px 0;
+            padding: 35px;
+            border-radius: 8px;
+            border: 2px solid #B5B5B5;
+        }
+
+        .section h2 {
+            color: #A40F16;
+            margin-bottom: 25px;
+            font-size: 2em;
+            font-weight: 600;
+            border-bottom: 4px solid #C0A353;
+            padding-bottom: 12px;
+        }
+
+        .section h3 {
+            color: #0D326F;
+            margin: 30px 0 18px 0;
+            font-size: 1.5em;
+            font-weight: 500;
+            border-left: 4px solid #C0A353;
+            padding-left: 15px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 25px 0;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #B5B5B5;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .metric-card {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 5px solid #A40F16;
+            border: 1px solid #B5B5B5;
+        }
+
+        .metric-card h4 {
+            color: #A40F16;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .metric-value {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #2c2c2c;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .analysis-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 25px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #B5B5B5;
+        }
+
+        .analysis-table th,
+        .analysis-table td {
+            border: 1px solid #B5B5B5;
+            padding: 16px;
+            text-align: center;
+            border-left: none;
+            border-right: none;
+        }
+
+        .analysis-table th {
+            background-color: #A40F16;
+            color: white;
+            font-weight: 600;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #C0A353;
+        }
+
+        .analysis-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .analysis-table tr:hover {
+            background-color: #fff3cd;
+        }
+
+        .kyunghee {
+            background-color: #fff1f3;
+            font-weight: 700;
+            color: #A40F16;
+        }
+
+        .recommendation {
+            background-color: #fff8dc;
+            border: 2px solid #C0A353;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .recommendation h4 {
+            color: #A40F16;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .recommendation ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .recommendation ul li {
+            margin: 8px 0;
+            color: #2c2c2c;
+            line-height: 1.6;
+        }
+
+        .recommendation ul ul li {
+            color: #717171;
+            font-size: 0.95em;
+        }
+
+        .highlight {
+            background-color: #C0A353;
+            color: white;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #717171;
+            margin-top: 50px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #B5B5B5;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 2.2em;
+            }
+
+            .section {
+                padding: 25px;
+                margin: 20px 0;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        /* 추가 스타일 */
+        .metric-value[style*="color: #d32f2f"] {
+            color: #A40F16 !important;
+        }
+
+        .metric-value[style*="color: #f57c00"] {
+            color: #AD1D19 !important;
+        }
+
+        .metric-value[style*="color: #388e3c"] {
+            color: #0D326F !important;
+        }
+
+        .metric-value[style*="color: #1976d2"] {
+            color: #0D326F !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>경희대학교 중앙일보 대학평가 재정 영향력 분석</h1>
+            <p>재정 역량 분석을 통한 평가 순위 개선 전략</p>
+        </div>
+
+        <div class="section">
+            <h2>분석 개요</h2>
+            <p>중앙일보 대학평가에서 재정 관련 지표는 <span class="highlight">총 80점(27.6%)</span>으로 상당한 비중을 차지합니다.</p>
+
+            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="metric-card">
+                    <h4>교육여건 재정지표</h4>
+                    <div class="metric-value">40점 (13.8%)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>교수연구 재정지표</h4>
+                    <div class="metric-value">25점 (8.6%)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>학생성과 재정지표</h4>
+                    <div class="metric-value">5점 (1.7%)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>기타 간접지표</h4>
+                    <div class="metric-value">10점 (3.4%)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>재정지표별 영향력 분석</h2>
+            <h3>중앙일보 평가 재정지표 매핑</h3>
+            <div class="chart-container">
+                <canvas id="impactChart"></canvas>
+            </div>
+
+            <div class="recommendation">
+                <h4>핵심 개선 포인트</h4>
+                <p><strong>1. 기부금 수입 확대</strong> - 세입 대비 기부금(10점) 지표 직접 영향</p>
+                <p><strong>2. 교육비 투자 증대</strong> - 등록금 대비 교육비, 학생 1인당 교육비(10점) 영향</p>
+                <p><strong>3. 장학금 확충</strong> - 등록금 대비 장학금, 학생당 장학금, 대학원생당 장학금(15점) 영향</p>
+                <p><strong>4. 산학협력 강화</strong> - 교수당 산학협력수익, 기술이전 관련(20점) 영향</p>
+                <p><strong>5. 기타 직접재정</strong> - 학생당 자료구입비, 창업지원(10점) 영향</p>
+                <p><strong>6. 간접재정지표</strong> - 기숙사 운영, 국제화 교육프로그램(10점) 영향</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>수입 구조 비교 분석</h2>
+            <h3>대학별 자금수입총계 비교 (2024년 기준)</h3>
+            <div class="chart-container">
+                <canvas id="totalRevenueChart"></canvas>
+            </div>
+
+            <table class="analysis-table">
+                <thead>
+                    <tr>
+                        <th>구분 (억원)</th>
+                        <th>경희대</th>
+                        <th>고려대</th>
+                        <th>성균관대</th>
+                        <th>연세대</th>
+                        <th>한양대</th>
+                        <th>경희대 순위</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background-color: #ffe8ee;">
+                        <td><strong>자금수입총계</strong></td>
+                        <td class="kyunghee"><strong>5,178억원</strong></td>
+                        <td><strong>9,096억원</strong></td>
+                        <td><strong>6,748억원</strong></td>
+                        <td><strong>11,707억원</strong></td>
+                        <td><strong>7,045억원</strong></td>
+                        <td style="color: #d32f2f; font-weight: bold;"><strong>5위</strong></td>
+                    </tr>
+                    <tr>
+                        <td>등록금수입</td>
+                        <td class="kyunghee">3,031억원</td>
+                        <td>3,841억원</td>
+                        <td>2,944억원</td>
+                        <td>4,168억원</td>
+                        <td>3,786억원</td>
+                        <td style="color: #f57c00; font-weight: bold;">4위</td>
+                    </tr>
+                    <tr>
+                        <td>수강료수입</td>
+                        <td class="kyunghee">105억원</td>
+                        <td>300억원</td>
+                        <td>157억원</td>
+                        <td>460억원</td>
+                        <td>307억원</td>
+                        <td style="color: #d32f2f; font-weight: bold;">5위</td>
+                    </tr>
+                    <tr>
+                        <td>전입금수입</td>
+                        <td class="kyunghee">395억원</td>
+                        <td>1,163억원</td>
+                        <td>204억원</td>
+                        <td>2,799억원</td>
+                        <td>273억원</td>
+                        <td style="color: #f57c00; font-weight: bold;">4위</td>
+                    </tr>
+                    <tr>
+                        <td>기부금수입</td>
+                        <td class="kyunghee">116억원</td>
+                        <td>867억원</td>
+                        <td>227억원</td>
+                        <td>692억원</td>
+                        <td>160억원</td>
+                        <td style="color: #d32f2f; font-weight: bold;">5위</td>
+                    </tr>
+                    <tr>
+                        <td>교육부대수입</td>
+                        <td class="kyunghee">249억원</td>
+                        <td>501억원</td>
+                        <td>1,130억원</td>
+                        <td>776억원</td>
+                        <td>568억원</td>
+                        <td style="color: #d32f2f; font-weight: bold;">5위</td>
+                    </tr>
+                    <tr>
+                        <td>교육외수입</td>
+                        <td class="kyunghee">152억원</td>
+                        <td>204억원</td>
+                        <td>248억원</td>
+                        <td>439억원</td>
+                        <td>175억원</td>
+                        <td style="color: #d32f2f; font-weight: bold;">5위</td>
+                    </tr>
+                    <tr>
+                        <td>투자와기타자산수입<br><small>(임의기금인출수입)</small></td>
+                        <td class="kyunghee">290억원</td>
+                        <td>850억원</td>
+                        <td>584억원</td>
+                        <td>724억원</td>
+                        <td>159억원</td>
+                        <td style="color: #f57c00; font-weight: bold;">4위</td>
+                    </tr>
+                    <tr>
+                        <td>고정자산매각수입</td>
+                        <td class="kyunghee">1억원</td>
+                        <td>37억원</td>
+                        <td>6억원</td>
+                        <td>0.3억원</td>
+                        <td>26억원</td>
+                        <td style="color: #f57c00; font-weight: bold;">4위</td>
+                    </tr>
+                    <tr>
+                        <td>미사용전기이월자금</td>
+                        <td class="kyunghee">44억원</td>
+                        <td>313억원</td>
+                        <td>641억원</td>
+                        <td>397억원</td>
+                        <td>405억원</td>
+                        <td style="color: #d32f2f; font-weight: bold;">5위</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>핵심 재정지표 격차 분석</h3>
+            <div class="chart-container">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>경희대학교 재정 취약점 심층 분석</h2>
+
+            <div class="recommendation">
+                <h4>핵심 문제점: 전 재정지표에서 5개 대학 중 최하위권</h4>
+                <p>경희대학교는 분석한 7개 주요 재정 지표 중 <strong>5개 항목에서 5위(최하위)</strong>, 2개 항목에서 4위를 기록하고 있습니다.</p>
+            </div>
+
+            <h3>1. 등록금 수입 격차 (교육비 지표의 기준점)</h3>
+            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="metric-card">
+                    <h4>경희대학교</h4>
+                    <div class="metric-value">3,135억원 (4위)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>1위 연세대학교</h4>
+                    <div class="metric-value">4,627억원</div>
+                </div>
+                <div class="metric-card">
+                    <h4>격차</h4>
+                    <div class="metric-value" style="color: #A40F16;">-1,492억원 (-32%)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>4개 대학 평균</h4>
+                    <div class="metric-value">3,991억원</div>
+                </div>
+            </div>
+
+            <h3>2. 기부금 수입 격차 (중앙일보 평가 10점 직접 영향)</h3>
+            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="metric-card">
+                    <h4>경희대학교 기부금</h4>
+                    <div class="metric-value">116억원 (5위)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>1위 고려대학교</h4>
+                    <div class="metric-value">867억원</div>
+                </div>
+                <div class="metric-card">
+                    <h4>격차</h4>
+                    <div class="metric-value" style="color: #A40F16;">-751억원 (-87%)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>4개 대학 평균</h4>
+                    <div class="metric-value">437억원</div>
+                </div>
+            </div>
+
+            <h3>3. 전입금 수입 격차 (교육비 관련 지표에 간접 영향)</h3>
+
+            <table class="analysis-table" style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>대학</th>
+                        <th>전입금 총액</th>
+                        <th>부속병원전입금</th>
+                        <th>산학협력단전입금</th>
+                        <th>법인전입금</th>
+                        <th>기타 전입금</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="kyunghee">경희대학교</td>
+                        <td class="kyunghee">395억원</td>
+                        <td class="kyunghee">263억원</td>
+                        <td class="kyunghee">80억원</td>
+                        <td class="kyunghee">132억원</td>
+                        <td class="kyunghee">-80억원</td>
+                    </tr>
+                    <tr>
+                        <td>고려대학교</td>
+                        <td>1,163억원</td>
+                        <td>989억원</td>
+                        <td>116억원</td>
+                        <td>174억원</td>
+                        <td>-116억원</td>
+                    </tr>
+                    <tr>
+                        <td>성균관대학교</td>
+                        <td>204억원</td>
+                        <td>0억원</td>
+                        <td>32억원</td>
+                        <td>204억원</td>
+                        <td>-32억원</td>
+                    </tr>
+                    <tr>
+                        <td>연세대학교</td>
+                        <td>2,799억원</td>
+                        <td>2,188억원</td>
+                        <td>224억원</td>
+                        <td>611억원</td>
+                        <td>-224억원</td>
+                    </tr>
+                    <tr>
+                        <td>한양대학교</td>
+                        <td>273억원</td>
+                        <td>104억원</td>
+                        <td>136억원</td>
+                        <td>169억원</td>
+                        <td>-136억원</td>
+                    </tr>
+                    <tr style="background-color: #f0f0f0; font-weight: bold;">
+                        <td>4개 대학 평균</td>
+                        <td>1,110억원</td>
+                        <td>820억원</td>
+                        <td>127억원</td>
+                        <td>290억원</td>
+                        <td>-127억원</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>4. 기타교육부대수입 격차 (교육비 지표에 직접 영향)</h3>
+            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="metric-card">
+                    <h4>경희대학교</h4>
+                    <div class="metric-value">25억원 (5위)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>1위 성균관대학교</h4>
+                    <div class="metric-value">772억원</div>
+                </div>
+                <div class="metric-card">
+                    <h4>격차</h4>
+                    <div class="metric-value" style="color: #A40F16;">-747억원 (-97%)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>4개 대학 평균</h4>
+                    <div class="metric-value">291억원</div>
+                </div>
+            </div>
+
+            <h3>5. 임의기금인출수입 격차 (교육 투자 여력에 영향)</h3>
+            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="metric-card">
+                    <h4>경희대학교</h4>
+                    <div class="metric-value">283억원 (5위)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>1위 고려대학교</h4>
+                    <div class="metric-value">839억원</div>
+                </div>
+                <div class="metric-card">
+                    <h4>격차</h4>
+                    <div class="metric-value" style="color: #A40F16;">-556억원 (-66%)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>4개 대학 평균</h4>
+                    <div class="metric-value">562억원</div>
+                </div>
+            </div>
+
+            <h3>6. 미사용전기이월자금 격차 (재정 안정성 지표)</h3>
+            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="metric-card">
+                    <h4>경희대학교</h4>
+                    <div class="metric-value">44억원 (5위)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>1위 성균관대학교</h4>
+                    <div class="metric-value">641억원</div>
+                </div>
+                <div class="metric-card">
+                    <h4>격차</h4>
+                    <div class="metric-value" style="color: #A40F16;">-597억원 (-93%)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>4개 대학 평균</h4>
+                    <div class="metric-value">439억원</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>한양대학교와의 재정역량 비교</h2>
+
+            <div class="recommendation">
+                <h4>비교 분석의 필요성</h4>
+                <p>한양대학교는 경희대학교 대비 자금수입총계에서 <strong>1,867억원(+36%)</strong> 앞서고 있습니다. 특히 주목할 점은 고려대(989억), 연세대(2,188억)와 달리 <strong>부속병원 전입금이 경희대(263억) 절반 수준인 104억원에 불과함에도 불구하고</strong> 상당한 규모의 자금수입총액을 확보하고 있다는 것입니다. 동일한 사립대학으로서 규모가 비슷하고 의료기관의 재정기여가 상대적으로 제한적인 상황에서도 이러한 격차를 보이는 주요 원인을 분석하여 개선 방향을 도출해야 합니다.</p>
+            </div>
+
+            <h3>자금수입총계 격차 분석</h3>
+            <div class="metrics-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="metric-card">
+                    <h4>경희대학교</h4>
+                    <div class="metric-value">5,178억원</div>
+                </div>
+                <div class="metric-card">
+                    <h4>한양대학교</h4>
+                    <div class="metric-value">7,045억원</div>
+                </div>
+                <div class="metric-card">
+                    <h4>격차</h4>
+                    <div class="metric-value" style="color: #A40F16;">-1,867억원 (-36%)</div>
+                </div>
+            </div>
+
+            <h3>주요 격차 원인 분석</h3>
+            <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="metric-card">
+                    <h4>1순위: 등록금 및 수강료</h4>
+                    <div class="metric-value" style="color: #A40F16;">-957억원 (51.2%)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>2순위: 미사용전기이월자금</h4>
+                    <div class="metric-value" style="color: #A40F16;">-361억원 (19.3%)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>3순위: 고정부채입금</h4>
+                    <div class="metric-value" style="color: #A40F16;">-189억원 (10.1%)</div>
+                </div>
+                <div class="metric-card">
+                    <h4>4순위: 교육부대수입</h4>
+                    <div class="metric-value" style="color: #A40F16;">-179억원 (9.6%)</div>
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <h4>핵심 개선 필요 영역</h4>
+                <ul>
+                    <li><strong>등록금 및 수강료 수입 (51.2% 기여)</strong>
+                        <ul>
+                            <li>등록금: 경희대 3,031억 vs 한양대 3,786억 (-755억원, -25%)</li>
+                            <li>수강료: 경희대 105억 vs 한양대 307억 (-202억원, -192%)</li>
+                            <li>학생 정원 확대, 평생교육원 활성화, 특수대학원 신설 검토 필요</li>
+                        </ul>
+                    </li>
+                    <li><strong>미사용전기이월자금 (19.3% 기여)</strong>
+                        <ul>
+                            <li>경희대 44억 vs 한양대 405억 (-361억원, -820%)</li>
+                            <li>재정 관리 효율성 및 중장기 재정 계획 수립 필요</li>
+                            <li>적립금 운용 전략 재검토 및 현금 유동성 관리 개선</li>
+                        </ul>
+                    </li>
+                    <li><strong>교육부대수입 상세 분석 필요 (9.6% 기여)</strong>
+                        <ul>
+                            <li>경희대 25억 vs 한양대 204억 (-179억원, -716%)</li>
+                            <li><span class="highlight">한양대학교 교육부대수입의 구체적 내역 분석 필요</span></li>
+                            <li>평생교육, 어학원, 연수원, 시설임대, 컨설팅 등 세부 수익원 파악</li>
+                            <li>한양대학교 벤치마킹을 통한 교육부대사업 확대 방안 도출</li>
+                        </ul>
+                    </li>
+                    <li><strong>부채 활용 전략 (10.1% 기여)</strong>
+                        <ul>
+                            <li>고정부채입금: 경희대 134억 vs 한양대 323억 (-189억원)</li>
+                            <li>교육 인프라 투자를 위한 전략적 부채 활용 검토</li>
+                            <li>저금리 장기 차입을 통한 시설 현대화 및 확장 고려</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="recommendation">
+                <h4>한양대학교 벤치마킹 포인트</h4>
+                <p><strong>즉시 조사 필요 항목:</strong></p>
+                <ul>
+                    <li>한양대학교 교육부대수입 204억원의 상세 구성 내역</li>
+                    <li>평생교육원, 어학원 등 부설기관 운영 현황 및 수익 구조</li>
+                    <li>기업 연수, 위탁교육 프로그램 운영 사례</li>
+                    <li>캠퍼스 시설 임대 및 부대사업 수익 모델</li>
+                    <li>미사용자금 405억원 축적 과정 및 운용 전략</li>
+                </ul>
+                <p><strong>기대 효과:</strong> 한양대 수준 달성 시 약 1,900억원 수입 증대 가능</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>중앙일보 평가 영향력 및 개선 전략</h2>
+
+            <h3>재정지표 점수 손실 추정</h3>
+            <div class="recommendation">
+                <h4>중앙일보 평가 재정관련 점수 손실 분석 (총 80점 중)</h4>
+                <ul>
+                    <li><strong>세입 대비 기부금 (10점)</strong>: 예상 획득 점수 2-3점 (7-8점 손실)</li>
+                    <li><strong>교육비 관련 지표 (10점)</strong>: 예상 획득 점수 4-5점 (5-6점 손실)</li>
+                    <li><strong>장학금 관련 지표 (15점)</strong>: 예상 획득 점수 8-10점 (5-7점 손실)</li>
+                    <li><strong>연구비 및 산학협력 (20점)</strong>: 예상 획득 점수 10-12점 (8-10점 손실)</li>
+                </ul>
+                <p><strong>총 예상 점수 손실: 25-31점 (재정지표의 31-39%)</strong></p>
+            </div>
+
+            <h3>단계별 개선 전략</h3>
+
+            <div class="recommendation">
+                <h4>1단계: 즉시 개선 가능 영역 (6개월~1년)</h4>
+                <ul>
+                    <li><strong>기부금 모금 체계 강화</strong>
+                        <ul>
+                            <li>동문회 연계 기부금 모금 캠페인 (목표: 연간 50억 추가)</li>
+                            <li>기업 파트너십 확대를 통한 지정기부금 확충</li>
+                            <li>기부금 전담 조직 신설 및 전문 인력 확보</li>
+                        </ul>
+                    </li>
+                    <li><strong>기타교육부대수입 다각화</strong>
+                        <ul>
+                            <li>평생교육원, 어학원 등 부설기관 수익 확대</li>
+                            <li>시설 대여 및 컨설팅 수익 모델 개발</li>
+                            <li>온라인 교육 프로그램 수익화</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p><strong>예상 효과: 재정지표 8-10점 개선</strong></p>
+            </div>
+
+            <div class="recommendation">
+                <h4>2단계: 중장기 구조 개선 (1-3년)</h4>
+                <ul>
+                    <li><strong>부속병원 수익성 강화</strong>
+                        <ul>
+                            <li>부속병원 전입금 증액 (목표: 연간 100억 추가)</li>
+                            <li>의료진 충원 및 특화 진료과 확대</li>
+                            <li>건강검진센터 등 수익성 높은 부문 강화</li>
+                        </ul>
+                    </li>
+                    <li><strong>임의기금 조성 및 운용</strong>
+                        <ul>
+                            <li>발전기금 확대 조성 (목표: 1,000억 규모)</li>
+                            <li>기금 운용 수익 최적화</li>
+                            <li>장학기금, 연구기금 분리 운용</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p><strong>예상 효과: 재정지표 15-20점 개선</strong></p>
+            </div>
+
+            <h3>개선 시나리오별 점수 예측</h3>
+            <div class="chart-container">
+                <canvas id="improvementChart"></canvas>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>현재 예상 점수</h4>
+                    <div class="metric-value" style="color: #d32f2f;">49점/80점</div>
+                </div>
+                <div class="metric-card">
+                    <h4>1단계 개선 후</h4>
+                    <div class="metric-value" style="color: #f57c00;">57점/80점</div>
+                </div>
+                <div class="metric-card">
+                    <h4>2단계 완료 후</h4>
+                    <div class="metric-value" style="color: #388e3c;">67점/80점</div>
+                </div>
+                <div class="metric-card">
+                    <h4>목표 달성률</h4>
+                    <div class="metric-value" style="color: #1976d2;">84%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>경희대학교 기획처 | 대학평가 TF팀 | 2025년</p>
+        </div>
+    </div>
+
+    <script>
+        // 차트 초기화 함수들
+        function initializeCharts() {
+            // 전체 수입 총계 비교 차트 (얇은 막대)
+            const totalRevenueCtx = document.getElementById('totalRevenueChart').getContext('2d');
+            new Chart(totalRevenueCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['경희대', '고려대', '성균관대', '연세대', '한양대'],
+                    datasets: [{
+                        label: '자금수입총계 (억원)',
+                        data: [5178, 9096, 6748, 11707, 7045],
+                        backgroundColor: [
+                            '#A40F16',  // 경희대 - 경희레드
+                            '#0066CC',  // 고려대 - 선명한 파랑
+                            '#FF6600',  // 성균관대 - 선명한 주황
+                            '#009900',  // 연세대 - 선명한 초록
+                            '#9900CC'   // 한양대 - 선명한 보라
+                        ],
+                        borderColor: [
+                            '#A40F16',
+                            '#0066CC',
+                            '#FF6600',
+                            '#009900',
+                            '#9900CC'
+                        ],
+                        borderWidth: 1,
+                        barThickness: 40
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '금액 (억원)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '5개 대학 자금수입총계 비교 (2024년)',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // 수입 구조 비교 차트 (핵심 재정지표 격차 분석 - 기존 두께 유지)
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(revenueCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['경희대', '고려대', '성균관대', '연세대', '한양대'],
+                    datasets: [
+                        {
+                            label: '등록금 및 수강료',
+                            data: [3135, 4141, 3101, 4627, 4093],
+                            backgroundColor: '#A40F16'
+                        },
+                        {
+                            label: '전입금',
+                            data: [395, 1163, 204, 2799, 273],
+                            backgroundColor: '#0066CC'
+                        },
+                        {
+                            label: '기부금',
+                            data: [116, 867, 227, 692, 160],
+                            backgroundColor: '#FF6600'
+                        },
+                        {
+                            label: '기타교육부대',
+                            data: [25, 133, 772, 35, 204],
+                            backgroundColor: '#009900'
+                        },
+                        {
+                            label: '임의기금인출',
+                            data: [283, 839, 566, 693, 150],
+                            backgroundColor: '#9900CC'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '금액 (억원)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '대학별 주요 수입원 비교 (억원)'
+                        }
+                    }
+                }
+            });
+
+            // 재정지표 영향력 도넛 차트
+            const impactCtx = document.getElementById('impactChart').getContext('2d');
+            new Chart(impactCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        '세입대비기부금(10점)',
+                        '교육비관련(10점)',
+                        '장학금관련(15점)',
+                        '연구비관련(5점)',
+                        '산학협력관련(20점)',
+                        '기타직접재정(10점)',
+                        '간접재정지표(10점)'
+                    ],
+                    datasets: [{
+                        data: [10, 10, 15, 5, 20, 10, 10],
+                        backgroundColor: [
+                            '#A40F16', '#0066CC', '#FF6600',
+                            '#009900', '#9900CC', '#FF3366', '#FFCC00'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '중앙일보 평가 재정지표별 배점 (총 80점)'
+                        }
+                    }
+                }
+            });
+
+            // 개선 효과 예측 차트 (얇은 막대)
+            const improvementCtx = document.getElementById('improvementChart').getContext('2d');
+            new Chart(improvementCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['현재', '1단계 개선', '2단계 완료', '목표'],
+                    datasets: [
+                        {
+                            label: '재정지표 점수 (80점 만점)',
+                            data: [49, 57, 67, 75],
+                            backgroundColor: ['#A40F16', '#FF6600', '#0066CC', '#009900'],
+                            borderColor: ['#A40F16', '#FF6600', '#0066CC', '#009900'],
+                            borderWidth: 1,
+                            barThickness: 50
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 80,
+                            title: {
+                                display: true,
+                                text: '점수'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '재정 역량 강화에 따른 예상 점수 개선 효과'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // 페이지 로드 시 차트 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+
+            // 추가 인터랙티브 기능
+            addInteractiveFeatures();
+        });
+
+        // 인터랙티브 기능 추가
+        function addInteractiveFeatures() {
+            // 클릭 시 상세 정보 표시 기능 등 추가 가능
+            console.log('경희대학교 재정 분석 보고서가 로드되었습니다.');
+        }
+
+        // 데이터 업데이트 함수
+        function updateChartsWithData(financialData) {
+            console.log('차트 데이터 업데이트:', financialData);
+        }
+
+        // 보고서 인쇄 기능
+        function printReport() {
+            window.print();
+        }
+
+        // 데이터 내보내기 기능
+        function exportData() {
+            const data = {
+                university: '경희대학교',
+                totalRevenue: 5178,
+                tuitionRevenue: 3135,
+                transferRevenue: 395,
+                donationRevenue: 116,
+                otherEducationRevenue: 25,
+                fundWithdrawal: 283,
+                carriedForward: 44,
+                analysisDate: new Date().toISOString().split('T')[0]
+            };
+
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'kyunghee_financial_analysis_data.json';
+            link.click();
+        }
+    </script>
+</body>
+</html>
